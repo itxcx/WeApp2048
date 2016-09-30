@@ -12,8 +12,8 @@ we.dqqdo.com
 
 截图:
 
-https://github.com/zmobs/WeApp2048/blob/master/screen/screen_1.png
 
 
-![aaa]("./screen/screen_1.png" "aaa")
+
+![aaa](https://github.com/zmobs/WeApp2048/raw/master/screen/screen_1.png aaa)
 
