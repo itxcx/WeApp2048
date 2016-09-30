@@ -1,0 +1,100 @@
+/** wxss **/
+
+.container{
+    background-color: red;
+}
+
+
+.content{
+    background-color: yellow;
+}
+
+.toastPro{
+    width: 128rpx;
+    height:128rpx;
+    background-color: yellow;
+}
+
+
+.item {
+    width: 73px;
+    height: 73px;
+    display: block;
+    line-height: 75px;
+    text-align: center;
+    float: left;
+    font-size: 22px;
+    font-weight: 800;
+    background-color: gold;
+    transition : transform 0.2s linear;
+    border: 1px solid yellow;
+    -webkit-transition: -webkit-transform 0.2s linear;
+}
+
+
+.col-content {
+    left: 3px;
+    top: 3px;
+    bottom: 3px;
+    height: 78x;
+    background-color:aqua;
+    /** 加粗亮绿 **/
+    border: 3px solid lightgreen;
+    margin-bottom:2px;
+    margin-top: 2px;
+    margin-left: 2px; 
+    margin-right: 2px;
+}
+
+
+
+/** 棋子的背景颜色 **/
+.col-content .d0 {
+    background-color: #CCC0B2;
+}
+.col-content .d2 {
+	color: #7c736a;
+    background: #eee4da;
+}
+.col-content .d4 {
+	color: #7c736a;
+    background: #ece0c8;
+}
+.col-content .d8 {
+	color: #fff7eb;
+    background: #f2b179;
+}
+.col-content .d16 {
+	color:#fff7eb;
+    background:#f59563;
+}
+.col-content .d32 {
+	color:#fff7eb;
+    background:#f57c5f;
+}
+.col-content .d64 {
+	color:#fff7eb;
+    background:#f65d3b;
+}
+.col-content .d128 {
+	color:#fff7eb;
+    background:#edce71;
+}
+.col-content .d256 {
+	color:#fff7eb;
+    background:#edcc61;
+}
+.col-content .d512 {
+	 color:#fff7eb;
+    background:#ecc850;
+}
+.col-content .d1024 {
+	color:#fff7eb;
+    background:#edc53f;
+    font-size: 20px;
+}
+.col-content .d2048 {
+	color:#fff7eb;
+    background:#eec22e;
+    font-size: 20px;
+}

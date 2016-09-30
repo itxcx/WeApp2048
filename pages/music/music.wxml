@@ -1,0 +1,21 @@
+<!--index.wxml-->
+<view class="container" bindtouchstart="start" bindtouchmove="move" bindtouchend="end">
+
+
+
+    <view wx:for="{{chessBoard}}" class="col-content">
+        <lable class="item d{{item}}" wx:for="{{chessBoard[index]}}">
+            {{item > 0 ? item : ''}}
+        </lable>
+    </view>
+
+
+
+  <!--<toast class="toastPro">
+    {{motto}}
+  </toast>-->
+
+</view>
+
+
+
