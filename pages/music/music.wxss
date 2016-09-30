@@ -10,9 +10,7 @@
 }
 
 .toastPro{
-    width: 128rpx;
-    height:128rpx;
-    background-color: yellow;
+   
 }
 
 

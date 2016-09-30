@@ -10,8 +10,10 @@
 // 最小点击事件
 var slidetime = 50;
 var direction = 0;
-var motto = "无";
-
+//var motto = "无";
+var toast1Hidden = true;
+// 标示当前游戏是否已经结束
+var isGameOver = false;
 
 // 界面布局格子的数据对象
 var chessBoard = [ [ "0", "0", "0", "0" ], [ "0", "0", "0", "0" ], [ "0", "0", "0", "0" ], [ "0", "0", "0", "0" ] ];
@@ -21,6 +23,11 @@ var chessBoard = [ [ "0", "0", "0", "0" ], [ "0", "0", "0", "0" ], [ "0", "0", "
  * 
  */
 var changeData = function( x, y, num ) {
+
+    if( isNaN( num ) ) {
+        num = 0;
+    }
+
     chessBoard[ x ][ y ] = Number( num );
 };
 
@@ -46,7 +53,7 @@ var randomAdd = function() {
 
     var arr = new Array();
 
-    console.log( "chessBoard  === " + chessBoard );
+    // 遍历棋盘，讲所有当前为 0 的棋子筛选到一个新的集合，并对其进行随机算法，获取到位置。
     for( var i = 0;i < chessBoard.length;i++ ) {
         for( var j = 0;j < chessBoard[ i ].length;j++ ) {
             if( chessBoard[ i ][ j ] == 0 ) {
@@ -65,26 +72,32 @@ var randomAdd = function() {
         return false;
     } else if( arr.length == 1 ) {
         var pos = arr[ 0 ];
-        var posNum = parseInt( Math.random() * ( arr.length - 1 ) + 1 );
-        chessBoard[ pos.x ][ pos.y ] = num;
+        var num = Math.random() > 0.7 ? 4 : 2;
+        changeData( pos.x, pos.y, num );
+
+        return true;
     }
     else {
         var posNum = parseInt( Math.random() * ( arr.length - 1 ) + 1 );
 
         var pos = arr[ posNum ];
         var num = Math.random() > 0.7 ? 4 : 2;
-        chessBoard[ pos.x ][ pos.y ] = num;
+
+        changeData( pos.x, pos.y, num );
+        //chessBoard[ pos.x ][ pos.y ] = num;
+
+        return true;
     }
 
 };
 
 
-var animation = wx.createAnimation({
-  transformOrigin: "50% 50%",
-  duration: 2000,
+var animation = wx.createAnimation( {
+    transformOrigin: "50% 50%",
+    duration: 2000,
 
-  timingFunction: "ease",
-  delay: 0
+    timingFunction: "ease",
+    delay: 0
 })
 
 
@@ -110,7 +123,7 @@ var calcChangeData = function( direction ) {
                     var nowValue = chessBoard[ i ][ j ];
 
 
-                    if(nowValue == 0){
+                    if( nowValue == 0 ) {
                         continue;
                     }
                     var leftValue = chessBoard[ i ][ j - 1 ];
@@ -119,12 +132,7 @@ var calcChangeData = function( direction ) {
                         // 如果数据为0，则直接进滚动
                         // 进入滚动模式，需要进行连续判断
 
-
-                        console.log( "------------------------------- " + i );
-
                         for( var k = j - 1;k >= 0;k-- ) {
-
-                            console.log( "k + " + k );
 
                             var leftTmpValue = chessBoard[ i ][ k ];
 
@@ -166,7 +174,7 @@ var calcChangeData = function( direction ) {
                 else {
                     // 当前数据
                     var nowValue = chessBoard[ i ][ j ];
-                    if(nowValue == 0){
+                    if( nowValue == 0 ) {
                         continue;
                     }
                     // 下一个将进行结算的格子数据
@@ -206,8 +214,6 @@ var calcChangeData = function( direction ) {
 
     } else if( direction == "u" ) {
 
-         
-
 
         // up
         for( var i = 0;i < chessBoard.length;i++ ) {
@@ -220,14 +226,14 @@ var calcChangeData = function( direction ) {
                 }
                 else {
                     var nowValue = chessBoard[ i ][ j ];
-                    if(nowValue == 0){
+                    if( nowValue == 0 ) {
                         continue;
                     }
 
                     var leftValue = chessBoard[ i - 1 ][ j ];
                     if( leftValue == 0 ) {
                         // 如果数据为0，则直接进滚动
-                        for( var k = i-1;k >= 0;k-- ) {
+                        for( var k = i - 1;k >= 0;k-- ) {
 
                             if( chessBoard[ k ][ j ] == 0 ) {
                                 changeData( k, j, nowValue );
@@ -236,7 +242,6 @@ var calcChangeData = function( direction ) {
                                 changeData( k, j, nowValue * 2 );
                                 changeData( k + 1, j, 0 );
                             }
-
                         }
 
                     } else if( nowValue == leftValue ) {
@@ -263,14 +268,14 @@ var calcChangeData = function( direction ) {
                 } else {
                     var nowValue = chessBoard[ i ][ j ];
 
-                    if(nowValue == 0){
+                    if( nowValue == 0 ) {
                         continue;
                     }
 
                     var leftValue = chessBoard[ i + 1 ][ j ];
 
                     if( leftValue == 0 ) {
-                        
+
 
                         // 如果数据为0，则直接进滚动
                         for( var k = i + 1;k < chessBoard.length;k++ ) {
@@ -303,7 +308,20 @@ var calcChangeData = function( direction ) {
     }
 
 
-    randomAdd();
+    // var result = randomAdd();
+    // if(result){
+    // }
+    // console.log("result  === " + result);
+
+    if( randomAdd() ) {
+        // 增加新的随机数块成功
+        toast1Hidden = true;
+    } else {
+        // 增加新的随机数块失败，说明当前棋盘已经被填满，则进行给出提示
+        isGameOver = true;
+        //motto = "游戏失败~";
+        toast1Hidden = false;
+    }
 
 
 
@@ -314,7 +332,39 @@ var calcChangeData = function( direction ) {
  */
 var pageObject = {
 
+
+    modalChange: function( event ) {
+
+        // 游戏状态打开为激活
+        isGameOver = false;
+        // 隐藏当前model
+        toast1Hidden = true;
+        // 充值棋盘数据，并且更新界面
+        for( var i = 0;i < chessBoard.length;i++ ) {
+            chessBoard[ i ].fill( 0 );
+        }
+        // 生成随机的开局
+        twoRondowm();
+        // 更新页面
+
+        var changedData = {};
+        changedData[ 'chessBoard' ] = chessBoard;
+        changedData[ 'toast1Hidden' ] = toast1Hidden;
+        this.setData( changedData );
+
+    },
+
+
+
+
+
     start: function( event ) {
+
+        // 游戏已经失败，除非正常开始，则不接受任何移动事件
+        if( isGameOver ) {
+            return;
+        }
+
         // 开始点击
         var touch = event.touches[ 0 ];
         startPos = { x: touch.pageX, y: touch.pageY, time: new Date() }; //取第一个touch的坐标值
@@ -324,6 +374,12 @@ var pageObject = {
 
     move: function( event ) {
         //当屏幕有多个touch或者页面被缩放过，就不执行move操作
+
+
+        // 游戏已经失败，除非正常开始，则不接受任何移动事件
+        if( isGameOver ) {
+            return;
+        }
 
         if( event.touches.length > 1 || event.scale && event.scale !== 1 ) {
             return;
@@ -359,22 +415,29 @@ var pageObject = {
     },
 
     end: function( event ) {
+
+        // 游戏已经失败，除非正常开始，则不接受任何移动事件
+        if( isGameOver ) {
+            return;
+        }
+
+
         //var touch = event.touches[0];
         //endPos = { x:touch.pageX, y:touch.pageY, time:new Date() }; //取第一个touch的坐标值
         // touch事件结束
         //console.log("bbb"  + event.touches.length);
         if( direction == 'l' ) {
             // left
-            motto = "左";
+
         } else if( direction == 'r' ) {
             // right
-            motto = "右";
+
         } else if( direction == 'u' ) {
             // up
-            motto = "上";
+
         } else if( direction == 'd' ) {
             // down
-            motto = "下";
+
         }
 
         calcChangeData( direction );
@@ -382,9 +445,12 @@ var pageObject = {
 
         //twoRondowm();
         var changedData = {};
-        changedData[ 'motto' ] = motto;
+        //changedData[ 'motto' ] = motto;
         changedData[ 'chessBoard' ] = chessBoard;
+        changedData[ 'toast1Hidden' ] = toast1Hidden;
 
+
+        console.log( "chessBoard  === " + chessBoard );
 
         this.setData( changedData );
     },
@@ -393,7 +459,19 @@ var pageObject = {
     onReady: function() {
         console.log( 'onReady' )
         twoRondowm();
+
     },
+
+    onLoad: function() {
+        console.log( 'onLoad' )
+
+        var changedData = {};
+        changedData[ 'toast1Hidden' ] = toast1Hidden;
+        this.setData( changedData );
+    },
+
+
+
 
 }
 

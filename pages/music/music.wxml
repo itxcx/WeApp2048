@@ -11,9 +11,9 @@
 
 
 
-  <!--<toast class="toastPro">
-    {{motto}}
-  </toast>-->
+  <modal  title="游戏失败了。" class="toastPro"  confirm-text="重新开始" hidden="{{toast1Hidden}}" bindconfirm="modalChange">
+    
+  </modal >
 
 </view>
 
