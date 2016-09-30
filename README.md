@@ -16,3 +16,6 @@ we.dqqdo.com
 
 ![](https://github.com/zmobs/WeApp2048/raw/master/screen/screen_1.png) 
 
+
+![](https://github.com/zmobs/WeApp2048/raw/master/screen/screen_2.png) 
+
